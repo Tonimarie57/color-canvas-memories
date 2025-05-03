@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Canvas Memories | Custom Paint-by-Numbers</title>
+    <style>
+        :root {
+            --primary: #5c6bc0; /* Artistic blue-purple */
+            --secondary: #ff7043; /* Warm orange accent */
+            --tertiary: #66bb6a; /* Fresh green */
+            --light: #f5f5f5;
+            --dark: #263238;
+            --highlight: #ffeb3b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .mobile-menu {
+            display: none;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1200/800');
+            opacity: 0.2;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            background-color: var(--secondary);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* Gallery Section */
+        .gallery {
+            background-color: #f9f9f9;
+            padding: 5rem 2rem;
+        }
+        
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 1rem;
+            color: white;
+            transform: translateY(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+        
+        .gallery-compare {
+            display: flex;
+            margin-top: 3rem;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .original, .paint-by-numbers {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .original img, .paint-by-numbers img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .divider {
+            width: 4px;
+            background-color: var(--primary);
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .testimonial {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .testimonial:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .testimonial-content::before {
+            content: '"';
+            font-size: 4rem;
+            position: absolute;
+            top: -2rem;
+            left: -1rem;
+            color: rgba(92, 107, 192, 0.1);
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .author-info span {
+            font-size: 0.875rem;
+            color: #777;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            background-color: #f9f9f9;
+            padding: 5rem 2rem;
+        }
+        
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .step h3 {
+            margin: 1.5rem 0 1rem;
+            color: var(--primary);
+        }
+        
+        /* Blog Section */
+        .blog {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .blog-post {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .blog-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .blog-content {
+            padding: 1.5rem;
+            text-align: left;
+        }
+        
+        .blog-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .blog-date {
+            font-size: 0.875rem;
+            color: #777;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .blog-excerpt {
+            margin-bottom: 1rem;
+        }
+        
+        /* Contact Section */
+        .contact {
+            background-color: #f9f9f9;
+            padding: 5rem 2rem;
+        }
+        
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 3rem auto 0;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .contact-info {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .contact-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-plan {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-plan:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .popular {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            transform: rotate(45deg) translateX(3.5rem) translateY(-1rem);
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .plan-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--tertiary);
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-col h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            position: relative;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.875rem;
+            color: #aaa;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .mobile-menu {
+                display: block;
+                font-size: 1.5rem;
+                color: white;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: all 0.5s ease-in-out;
+            }
+            
+            .nav-links.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .gallery-compare {
+                flex-direction: column;
+            }
+            
+            .original, .paint-by-numbers {
+                padding: 1rem;
+            }
+            
+            .divider {
+                width: 100%;
+                height: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-img">
+                    <img src="/api/placeholder/40/40" alt="Color Canvas Memories Logo" width="40">
+                </div>
+                <span>Color Canvas Memories</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <i>≡</i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Transform Your Photos Into<br>Custom Paint-by-Numbers Art</h1>
+            <p>Create meaningful memories with our personalized paint-by-numbers kits. Turn your favorite photos into relaxing creative projects that anyone can enjoy.</p>
+            <a href="#pricing" class="btn">Get Started Today</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <h2 class="section-title">Why Choose Us</h2>
+        <p>At Color Canvas Memories, we believe everyone can be an artist. Our custom paint-by-numbers kits transform your precious photos into artistic masterpieces that you create yourself.</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🖼️</div>
+                <h3>Custom Made</h3>
+                <p>Upload your favorite photos and we'll transform them into personalized paint-by-numbers canvases just for you.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <h3>Premium Quality</h3>
+                <p>Enjoy our pre-mixed acrylic paints and high-quality canvases that ensure vibrant results and long-lasting memories.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🧘</div>
+                <h3>Stress Relief</h3>
+                <p>Experience the therapeutic benefits of painting while creating something meaningful and personal.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="gallery-container">
+            <h2 class="section-title">Our Gallery</h2>
+            <p>Browse through our collection of original photos and their paint-by-numbers transformations.</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Paint by Numbers Sample 1">
+                    <div class="gallery-overlay">
+                        <h3>Family Portrait</h3>
+                        <p>Customer: Sarah J.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Paint by Numbers Sample 2">
+                    <div class="gallery-overlay">
+                        <h3>Pet Memorial</h3>
+                        <p>Customer: Michael T.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Paint by Numbers Sample 3">
+                    <div class="gallery-overlay">
+                        <h3>Wedding Day</h3>
+                        <p>Customer: Emma & John</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Paint by Numbers Sample 4">
+                    <div class="gallery-overlay">
+                        <h3>Vacation Memories</h3>
+                        <p>Customer: Rodriguez Family</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Paint by Numbers Sample 5">
+                    <div class="gallery-overlay">
+                        <h3>Baby's First Christmas</h3>
+                        <p>Customer: The Wilsons</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/300" alt="Paint by Numbers Sample 6">
+                    <div class="gallery-overlay">
+                        <h3>Graduation Gift</h3>
+                        <p>Customer: David L.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 4rem; margin-bottom: 2rem;">Before & After Transformation</h3>
+            <div class="gallery-compare">
+                <div class="original">
+                    <h4>Original Photo</h4>
+                    <img src="/api/placeholder/500/400" alt="Original Photo">
+                </div>
+                <div class="divider"></div>
+                <div class="paint-by-numbers">
+                    <h4>Paint-by-Numbers</h4>
+                    <img src="/api/placeholder/500/400" alt="Paint by Numbers Version">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <p>Don't just take our word for it. See what our customers have to say about their Color Canvas Memories experience.</p>
+        
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>I ordered a custom paint-by-numbers of my dog who passed away last year. The kit was so well made, and painting it was therapeutic. Now I have a beautiful memorial that I painted myself. Thank you!</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="/api/placeholder/50/50" alt="Jennifer R." class="testimonial-avatar">
+                    <div class="author-info">
+                        <h4>Jennifer R.</h4>
+                        <span>Chicago, IL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>I'm not artistic at all, but I was able to create a stunning portrait of my wedding day. The instructions were clear, and the quality of the paints was excellent. This will be my go-to gift for friends and family!</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="/api/placeholder/50/50" alt="Marcus T." class="testimonial-avatar">
+                    <div class="author-info">
+                        <h4>Marcus T.</h4>
+                        <span>Austin, TX</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-content">
+                    <p>I bought this as a birthday gift for my mom, and she absolutely loved it! The customer service was outstanding, and they helped me choose the best photo to transform. The final result looks amazing on her wall.</p>
+                </div>
+                <div class="testimonial-author">
+                    <img src="/api/placeholder/50/50" alt="Sophia K." class="testimonial-avatar">
+                    <div class="author-info">
+                        <h4>Sophia K.</h4>
+                        <span>Portland, OR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="steps-container">
+            <h2 class="section-title">How It Works</h2>
+            <p>Creating your custom paint-by-numbers masterpiece is easy with our simple 4-step process.</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Your Photo</h3>
+                    <p>Choose your favorite high-quality photo to transform into a paint-by-numbers canvas.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>We Create Your Kit</h3>
+                    <p>Our artists transform your photo into a detailed paint-by-numbers pattern with premium materials.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Receive Your Kit</h3>
+                    <p>Your custom kit arrives with everything you need: canvas, paints, brushes, and instructions.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Create & Display</h3>
+                    <p>Follow the numbers to paint your masterpiece, then proudly display your personal artwork.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog" id="blog">
+        <h2 class="section-title">Our Blog</h2>
+        <p>Discover painting tips, success stories, and creative inspiration on our blog.</p>
+        
+        <div class="blog-grid">
+            <div class="blog-post">
+                <img src="/api/placeholder/400/200" alt="Blog Post 1" class="blog-img">
+                <div class="blog-content">
+                    <span class="blog-date">April 28, 2025</span>
+                    <h3>5 Tips for Perfect Paint-by-Numbers Results</h3>
+                    <p class="blog-excerpt">Learn the secrets to achieving professional-looking results with your custom paint-by-numbers kit...</p>
+                    <a href="#" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Read More</a>
+                </div>
+            </div>
+            <div class="blog-post">
+                <img src="/api/placeholder/400/200" alt="Blog Post 2" class="blog-img">
+                <div class="blog-content">
+                    <span class="blog-date">April 15, 2025</span>
+                    <h3>The Therapeutic Benefits of Painting</h3>
+                    <p class="blog-excerpt">Discover how paint-by-numbers can reduce stress and improve mental wellbeing...</p>
+                    <a href="#" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Read More</a>
+                </div>
+            </div>
+            <div class="blog-post">
+                <img src="/api/placeholder/400/200" alt="Blog Post 3" class="blog-img">
+                <div class="blog-content">
+                    <span class="blog-date">April 5, 2025</span>
+                    <h3>Customer Spotlight: Maria's Family Portrait</h3>
+                    <p class="blog-excerpt">How one customer created a meaningful family heirloom with our custom kit...</p>
+                    <a href="#" class="btn" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Our Pricing</h2>
+        <p>Choose the perfect custom paint-by-numbers kit that fits your needs.</p>
+        
+        <div class="pricing-grid">
+            <div class="pricing-plan">
+                <h3 class="plan-name">Starter Kit</h3>
+                <div class="plan-price">$39.99 <span>USD</span></div>
+                <p>Perfect for beginners or small gifts.</p>
+                <ul class="plan-features">
+                    <li>8"x10" Custom Canvas</li>
+                    <li>20 Acrylic Paint Colors</li>
+                    <li>2 Paint Brushes</li>
+                    <li>Standard Digital Transformation</li>
+                    <li>Basic Instructions</li>
+                </ul>
+                <a href="#" class="btn">Order Now</a>
+            </div>
+            <div class="pricing-plan">
+                <div class="popular">Most Popular</div>
+                <h3 class="plan-name">Premium Kit</h3>
+                <div class="plan-price">$59.99 <span>USD</span></div>
+                <p>Our most popular option with enhanced features.</p>
+                <ul class="plan-features">
+                    <li>12"x16" Custom Canvas</li>
+                    <li>30 Premium Paint Colors</li>
+                    <li>3 Professional Brushes</li>
+                    <li>Enhanced Digital Transformation</li>
+                    <li>Detailed Instructions + Tips</li>
+                    <li>Wooden Frame Included</li>
+                </ul>
+                <a href="#" class="btn">Order Now</a>
+            </div>
+            <div class="pricing-plan">
+                <h3 class="plan-name">Deluxe Kit</h3>
+                <div class="plan-price">$89.99 <span>USD</span></div>
+                <p>The ultimate experience for serious painters.</p>
+                <ul class="plan-features">
+                    <li>16"x20" Custom Canvas</li>
+                    <li>40 Artist-Grade Paint Colors</li>
+                    <li>5 Professional Brush Set</li>
+                    <li>Premium Digital Transformation</li>
+                    <li>Comprehensive Guide</li>
+                    <li>Wooden Frame & Easel Included</li>
+                    <li>Varnish for Finishing</li>
+                </ul>
+                <a href="#" class="btn">Order Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <h2 class="section-title">Contact Us</h2>
+            <p>Have questions or need assistance? We're here to help!</p>
+            
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">📱</div>
+                    <h3>Phone</h3>
+                    <p>(555) 123-4567</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Email</h3>
+                    <p>hello@colorcanvasmemories.com</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🏢</div>
+                    <h3>Address</h3>
+                    <p>123 Artistic Lane<br>Creationville, AR 72701</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Color Canvas Memories</h3>
+                <p>Transform your cherished photos into stunning paint-by-numbers artwork that you create yourself.</p>
+                <div class="social-links">
+                    <a href="#"><span>fb</span></a>
+                    <a href="#"><span>ig</span></a>
+                    <a href="#"><span>tw</span></a>
+                    <a href="#"><span>pin</span></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Gift Cards</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Newsletter</h3>
+                <p>Subscribe to get special offers, free giveaways, and new product announcements.</p>
+                <form class="footer-form">
+                    <input type="email" placeholder="Your email address" class="form-control" style="margin-bottom: 1rem;">
+                    <button type="submit" class="btn" style="width: 100%;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Color Canvas Memories. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+        
+        // Reveal animations on scroll
+        const revealElements = document.querySelectorAll('.feature, .gallery-item, .testimonial, .step, .blog-post, .pricing-plan, .contact-card');
+        
+        function checkScroll() {
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Initialize elements
+        revealElements.forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+        
+        // Check on load and scroll
+        window.addEventListener('load', checkScroll);
+        window.addEventListener('scroll', checkScroll);
+    </script>
+</body>
+</html>
